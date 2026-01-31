@@ -18,7 +18,7 @@ dotfiles/
 ## Быстрый старт
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/dotfiles ~/Projects/dotfiles
+git clone https://github.com/moro3k/dotfiles ~/Projects/dotfiles
 cd ~/Projects/dotfiles
 chmod +x install.sh
 ./install.sh
