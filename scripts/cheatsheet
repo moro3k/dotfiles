@@ -1,0 +1,2 @@
+#!/bin/bash
+bat --style=plain --paging=always ~/.config/cheatsheet.md 2>/dev/null || less ~/.config/cheatsheet.md
