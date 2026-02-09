@@ -1,0 +1,2 @@
+#!/bin/bash
+bat --style=plain --paging=always ~/.config/hotkeys.md 2>/dev/null || less ~/.config/hotkeys.md

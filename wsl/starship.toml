@@ -1,0 +1,44 @@
+# Простой классический промпт: user@host:dir $
+format = "$username@$hostname:$directory $character"
+
+scan_timeout = 50
+command_timeout = 500
+
+[username]
+show_always = true
+format = "[$user]($style)"
+style_user = "bold green"
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style)"
+style = "bold green"
+
+[directory]
+format = "[$path]($style)"
+style = "bold blue"
+truncation_length = 3
+truncate_to_repo = false
+
+[character]
+success_symbol = "[\\$](white)"
+error_symbol = "[\\$](bold red)"
+
+# Отключаем лишнее
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[python]
+disabled = true
+
+[rust]
+disabled = true
+
+[package]
+disabled = true
