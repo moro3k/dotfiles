@@ -1,8 +1,8 @@
 # dotfiles
 
-**Windows 11 → Alacritty → WSL2 Ubuntu → Zellij → Bash**
+**Windows 11 → Alacritty → WSL2 Ubuntu → tmux → Bash**
 
-<img src="https://img.shields.io/badge/OS-WSL2-0078D4?style=flat-square&logo=linux&logoColor=white" alt="WSL2"> <img src="https://img.shields.io/badge/Terminal-Alacritty-F46D01?style=flat-square&logo=alacritty&logoColor=white" alt="Alacritty"> <img src="https://img.shields.io/badge/Mux-Zellij-BF4722?style=flat-square" alt="Zellij"> <img src="https://img.shields.io/badge/Shell-Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white" alt="Bash"> <img src="https://img.shields.io/badge/Theme-Tokyo%20Night-7aa2f7?style=flat-square" alt="Tokyo Night">
+<img src="https://img.shields.io/badge/OS-WSL2-0078D4?style=flat-square&logo=linux&logoColor=white" alt="WSL2"> <img src="https://img.shields.io/badge/Terminal-Alacritty-F46D01?style=flat-square&logo=alacritty&logoColor=white" alt="Alacritty"> <img src="https://img.shields.io/badge/Mux-tmux-1BB91F?style=flat-square" alt="tmux"> <img src="https://img.shields.io/badge/Shell-Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white" alt="Bash"> <img src="https://img.shields.io/badge/Theme-Tokyo%20Night-7aa2f7?style=flat-square" alt="Tokyo Night">
 
 ---
 
@@ -12,16 +12,19 @@
 dotfiles/
 ├── alacritty/
 │   └── alacritty.toml       # терминал (Windows)
+├── tmux/
+│   ├── tmux.conf             # Zellij-like конфиг
+│   ├── lock.conf             # режим блокировки
+│   ├── unlock.conf           # разблокировка
+│   ├── kbd-layout.sh         # индикатор раскладки RU/EN
+│   └── claude-usage.sh       # лимиты Claude API (опционально)
 ├── wsl/
-│   ├── .bashrc              # shell + автозапуск Zellij
-│   └── starship.toml        # промпт
-├── zellij/
-│   ├── config.kdl           # конфиг + Tokyo Night
-│   └── dev.kdl              # layout: claude / dev / git
+│   ├── .bashrc               # shell
+│   └── starship.toml         # промпт
 ├── scripts/
-│   └── cheatsheet           # F1 → hotkeys
-├── hotkeys.md               # все хоткеи
-└── install.sh               # установка одной командой
+│   └── cheatsheet            # hotkeys
+├── hotkeys.md                # все хоткеи
+└── install.sh                # установка
 ```
 
 ## Установка
@@ -44,42 +47,65 @@ wsl --install -d Ubuntu
 ### 4. Клонируем и ставим
 
 ```bash
-# В WSL:
 git clone https://github.com/moro3k/dotfiles ~/Projects/dotfiles
 cd ~/Projects/dotfiles && ./install.sh
 ```
 
-Скрипт установит: системные пакеты, Rust, cargo-binstall, Rust CLI утилиты, линки конфигов, настройку git.
-
 ### 5. Конфиг Alacritty (PowerShell)
 
 ```powershell
-# Создать папку если нет
 mkdir "$env:APPDATA\alacritty" -Force
-
-# Скопировать конфиг из WSL
 copy "\\wsl$\Ubuntu\home\$env:USERNAME\Projects\dotfiles\alacritty\alacritty.toml" "$env:APPDATA\alacritty\alacritty.toml"
 ```
 
-### 6. Zellij
+Готово. Открываем Alacritty — автоматически попадаем в WSL → tmux.
 
-```bash
-# В WSL:
-cargo binstall -y zellij
+---
 
-# Линк конфига
-mkdir -p ~/.config/zellij
-ln -sf ~/Projects/dotfiles/zellij/config.kdl ~/.config/zellij/config.kdl
-ln -sf ~/Projects/dotfiles/zellij/dev.kdl ~/.config/zellij/dev.kdl
-```
+## tmux (Zellij-like)
 
-Готово. Открываем Alacritty — автоматически попадаем в WSL → Zellij.
+Модальные режимы как в Zellij, подсказки по центру статусбара, раскладка и время справа.
+
+### Режимы
+
+| Вход | Режим | Подсказки |
+|------|-------|-----------|
+| `Ctrl+P` | PANE | `d` ↓  `r` →  `x` ✕  `f` zoom  `←→` nav  `Esc` |
+| `Ctrl+T` | TAB | `n` new  `x` ✕  `r` ren  `←→` sw  `1-5` go  `Esc` |
+| `Ctrl+O` | SESS | `d` det  `w` list  `r` ren  `Esc` |
+| `Ctrl+G` | LOCK | Отключает все хоткеи. `Ctrl+G` — unlock |
+
+### Быстрые клавиши
+
+| Клавиша | Действие |
+|---------|----------|
+| `Alt+1..5` | Переключить/создать вкладку |
+| `Ctrl+B \|` | Сплит горизонтально |
+| `Ctrl+B -` | Сплит вертикально |
+| `Ctrl+B → Ctrl+S` | Сохранить сессию (resurrect) |
+| `Ctrl+B → Ctrl+R` | Восстановить сессию |
+
+### Мышь
+
+| Действие | Результат |
+|----------|-----------|
+| Выделение | Копирует в буфер (tmux + системный через tmux-yank) |
+| Средняя кнопка | Вставить из буфера |
+| ПКМ | Контекстное меню tmux |
+| Колёсико | Скролл |
+
+### Русская раскладка
+
+Все `Ctrl+` комбинации работают и в русской раскладке.
+
+### Плагины
+
+- **tmux-resurrect** — сохранение/восстановление сессий
+- **tmux-yank** — копирование в системный буфер
 
 ---
 
 ## Rust CLI утилиты
-
-Современные замены стандартных команд, написанные на Rust.
 
 | Утилита | Заменяет | Описание |
 |---------|----------|----------|
@@ -96,7 +122,6 @@ ln -sf ~/Projects/dotfiles/zellij/dev.kdl ~/.config/zellij/dev.kdl
 | [`starship`](https://github.com/starship/starship) | prompt | Быстрый промпт |
 | [`atuin`](https://github.com/atuinsh/atuin) | history | Поиск по истории |
 | [`gitui`](https://github.com/extrawurst/gitui) | — | Git TUI |
-| [`zellij`](https://github.com/zellij-org/zellij) | `tmux` | Мультиплексор |
 
 ### Алиасы
 
@@ -111,35 +136,9 @@ find  # fd
 
 ---
 
-## Хоткеи
-
-### Alacritty
-
-| Клавиша | Действие |
-|---------|----------|
-| `Ctrl+Shift+C/V` | Копировать / Вставить |
-| `Ctrl +/-/0` | Размер шрифта |
-| `Ctrl+Shift+F` | Поиск |
-| `Shift+Enter` | Мультистрока в Claude Code |
-| `ПКМ` | Вставить |
-
-### Zellij
-
-| Режим | Клавиша | Действия |
-|-------|---------|----------|
-| Панели | `Ctrl+P` | `n` новая, `x` закрыть, `w` float, `f` fullscreen, `h/j/k/l` навигация |
-| Вкладки | `Ctrl+T` | `n` новая, `x` закрыть, `h/l` переключение, `1-5` по номеру |
-| Ресайз | `Ctrl+N` | `h/j/k/l` размер, `+/-` больше/меньше |
-| Скролл | `Ctrl+S` | `j/k` скролл, `Ctrl+D/U` полстраницы, `g/G` начало/конец |
-| Сессия | `Ctrl+O` | `d` detach, `q` выход |
-| — | `Ctrl+Q` | Выход |
-| — | `F1` | Шпаргалка (popup) |
-
----
-
 ## Тема
 
-**Tokyo Night** — единая цветовая схема для Alacritty и Zellij.
+**Tokyo Night** — единая цветовая схема для Alacritty и tmux.
 
 ```
 bg: #0f111a  fg: #c0caf5

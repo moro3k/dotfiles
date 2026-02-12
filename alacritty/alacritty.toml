@@ -6,7 +6,7 @@ TERM = "xterm-256color"
 
 [terminal.shell]
 program = "C:\\Windows\\System32\\wsl.exe"
-args = ["--distribution-id", "{15dde542-c543-4c9c-a746-6982a03a20b3}", "--cd", "~"]
+args = ["--cd", "~"]
 
 [window]
 decorations = "full"
@@ -17,7 +17,7 @@ opacity = 0.92
 blur = true
 
 [scrolling]
-history = 50000
+history = 0       # скролл через tmux, Alacritty не нужен
 multiplier = 3
 
 [font]
@@ -28,7 +28,6 @@ bold_italic = { family = "JetBrainsMono Nerd Font Mono", style = "Bold Italic" }
 size = 12.5
 
 [selection]
-# выделил → сразу в системный буфер (топ)
 save_to_clipboard = true
 
 [cursor]
@@ -38,19 +37,12 @@ unfocused_hollow = true
 [mouse]
 hide_when_typing = true
 
-# ПКМ = вставка (Paste)
-[[mouse.bindings]]
-mouse = "Right"
-action = "Paste"
-
-# опционально: middle click = PasteSelection (linux-стайл)
 [[mouse.bindings]]
 mouse = "Middle"
 action = "PasteSelection"
 
 [keyboard]
 bindings = [
-  # классика: без конфликтов с Zellij
   { key = "C", mods = "Control|Shift", action = "Copy" },
   { key = "V", mods = "Control|Shift", action = "Paste" },
 
@@ -64,6 +56,7 @@ bindings = [
   { key = "Return", mods = "Shift", chars = "\n" },
 ]
 
+# Tokyo Night
 [colors.primary]
 background = "#0f111a"
 foreground = "#c0caf5"
