@@ -148,19 +148,10 @@ eval "$(zoxide init bash)"
 eval "$(atuin init bash --disable-up-arrow)"
 
 # ═══════════════════════════════════════════════════════════════════
-# ZELLIJ — автозапуск мультиплексора
+# tmux — автозапуск мультиплексора
 # ═══════════════════════════════════════════════════════════════════
-if [[ -z "$ZELLIJ" && -z "$INSIDE_EMACS" && -z "$VSCODE_INJECTION" ]]; then
-    # Автоподключение к существующей сессии или создание новой
-    if command -v zellij &> /dev/null; then
-        # Имя сессии по умолчанию
-        ZELLIJ_SESSION="main"
-
-        # Проверяем есть ли активная сессия
-        if zellij list-sessions 2>/dev/null | grep -q "^$ZELLIJ_SESSION"; then
-            zellij attach "$ZELLIJ_SESSION"
-        else
-            zellij -s "$ZELLIJ_SESSION"
-        fi
+if [[ -z "$TMUX" && -z "$INSIDE_EMACS" && -z "$VSCODE_INJECTION" ]]; then
+    if command -v tmux &> /dev/null; then
+        tmux new-session -A -s main
     fi
 fi
