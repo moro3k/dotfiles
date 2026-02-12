@@ -56,7 +56,7 @@ done_ "Rust CLI tools"
 
 # 6. Link dotfiles
 step "Linking dotfiles..."
-ln -sf "$DOTFILES/.bashrc" ~/.bashrc
+ln -sf "$DOTFILES/wsl/.bashrc" ~/.bashrc
 mkdir -p ~/.config
 ln -sf "$DOTFILES/.config/starship.toml" ~/.config/starship.toml
 done_ "Dotfiles linked"
